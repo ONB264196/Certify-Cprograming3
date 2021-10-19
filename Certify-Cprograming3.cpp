@@ -1,73 +1,170 @@
 ﻿#include"stdio.h"
-#define _16c
+#define _42Q41
 
-#ifdef _40Q6
-#define MONEYS 6
-int main(void) 
-{
-	int yen[MONEYS] = { 500,100,50,10,5,1 };
-	int left[MONEYS], back[MONEYS];
-	int i, amount, number;
-	int price, payment, change;
-
-	//各硬貨の残枚数と釣銭枚数の初期化
-	for (i = 0; i < MONEYS; i++) {
-		left[i] = 0;
-		back[i] = 0;
-	}
-	
-	//現在の硬貨の残枚数の入力
-	do 
-	{
-		printf("額面（円）：　");
-		scanf_s("%d", &amount);
-		printf("残枚数:　");
-		scanf_s("%d", &number);
-		for (i = 0; i < MONEYS; i++) {
-			if (yen[i] == amount) {
-				left[i] = number;
-				break;
-			}
-		}
-	} while (amount != -1);
-
-	//購入金額の入力
-	printf("\n 購入金額（円）：　");
-	scanf_s("%d", &price);
-	
-	//支払金額の入力
-	printf("支払金額（円）：　");
-	scanf_s("%d", &payment);
-
-	change = payment - price;
-	if (change < 0) {
-		printf("\n 支払金額不足\n");
-	}
-	else {
-		printf("\n 釣銭 %5d 円（内訳）\n", change);
-		for (i = 0; i < MONEYS; i++) {
-			while (change > 0 && left[i] > 0 && change >= yen[i]) {
-				left[i]--;
-				back[i]++;
-				change -= yen[i];
-			}
-			if (change == 0) {
-				break;
-			}
-		}
-		if (change != 0) {
-			printf("釣銭不足\n");
-		}
-		else {
-			for (i = 0; i < MONEYS; i++) {
-				printf("%4d 円 : %3d 枚\n", yen[i], back[i]);
-			}
-		}
-	}
+#ifdef _emptyname
+int main(void) {
+	printf("[%4x]", 0x8e);
 	return 0;
 }
 #endif
 
+#ifdef _42Q6
+int main(void) {
+	int i, j, cnt;
+	char input[1001], last[2];
+
+	printf("圧縮前の文字列：");
+	scanf_s("%s\n", input);
+	printf("圧縮後の文字列：");
+
+	//圧縮処理
+	last[0] = input[0];
+	last[1] = input[1];
+	cnt = 1;
+
+	for (i = 2; input[i] != '\0'; i += 2) {
+		if (last[0] != input[i] || last[1] != input[i + 1]) {
+			if (cnt <= 2) {
+				for (j = 0; j < cnt; j++) {
+					printf("%c%c", last[0], last[1]);
+				}
+			}
+			else {
+				printf("*%d%c%c", cnt, last[0], last[1]);
+			}
+			last[0] = input[i];
+			last[1] = input[i + 1];
+			cnt = 0;
+		}
+		cnt++;
+	}
+
+	if (cnt <= 2) {
+		for (j = 0; j < cnt; j++) {
+			printf("%c%c", last[0], last[1]);
+		}
+	}
+	else {
+		printf("*%d%c%c", cnt, last[0], last[1]);
+
+		return 0;
+	}
+}
+#endif
+
+#ifdef _42Q42
+int main(void) {
+	char str[] = "--PE-N***I--NK-";
+	char buf[80], ch;
+	int state = 0, i = 0, j = 0;
+	int s = 0, t = 0;
+	int cnt = 0;
+
+	while (str[i] != '\0') {
+		ch = str[i];
+		switch (state) {
+		case 0:
+			s++;
+			cnt++;
+			printf("[%2d]s = %d\n", cnt, s);
+			if (ch != '-') {
+				buf[j++] = ch;
+				state = 1;
+			}
+			break;
+		case 1:
+			switch (ch) {
+			case '*':
+				state = 2;
+				break;
+			case '-':
+				state = 0;
+				break;
+			default:
+				buf[j++] = ch;
+				break;
+			}
+			break;
+		case 2:
+			t++;
+			cnt++;
+			printf("[%2d]t = %d\n", cnt, t);
+			if (ch == '*') {
+				buf[j++] = '*';
+			}
+			else {
+				buf[j++] = ch;
+			}
+			state = 1;
+			break;
+		}
+		i++;
+	}
+	buf[j] = '\0';
+
+	putchar('\n');
+	printf("s = %2d\n", s);
+	printf("t = %2d\n", t);
+	printf("buf = [%s]\n", buf);
+
+	return 0;
+}
+#endif
+
+#ifdef _42Q41
+int main(void) {
+	int i, a, b, c;
+	int data[] = { 5,2,6,0,5,2,9 };
+	int weight[] = { 1,3,1,3,1,3,1 };
+	int cnt = 0;
+
+	a = 1;
+	b = 1;
+	c = 3;
+	for (i = 0; i < 7; i++) {
+		switch(i) {
+		case 2:
+		case 3:
+		case 6:
+			a *= 2;
+			cnt++;
+			printf("[%2d]a = %d\n", cnt, a);
+			break;
+		case 1:
+		case 5:
+			a++;			
+			cnt++;
+			printf("[%2d]a = %d\n", cnt, a);
+			break;
+		}
+
+		switch (data[i] * weight[i]) {
+		case 5:
+			b += weight[i] * c;
+			cnt++;
+			printf("[%2d]b = %d\n", cnt, b);
+			break;
+		case 6:
+			b -= 3;
+			cnt++;
+			printf("[%2d]b = %d\n", cnt, b);
+			break;
+		default:
+			c += weight[i];
+			cnt++;
+			printf("[%2d]c = %d\n", cnt, c);
+			break;
+		}
+	}
+
+	putchar('\n');
+	printf("a = %2d\n", a);
+	printf("b = %2d\n", b);
+	printf("c = %2d\n", c);
+
+	return 0;
+}
+#endif
 
 #ifdef _40Q6a
 #define MONEYS 7
@@ -155,7 +252,75 @@ int main(void)
 }
 #endif
 
+#ifdef _40Q6
+#define MONEYS 6
+int main(void) 
+{
+	int yen[MONEYS] = { 500,100,50,10,5,1 };
+	int left[MONEYS], back[MONEYS];
+	int i, amount, number;
+	int price, payment, change;
 
+	//各硬貨の残枚数と釣銭枚数の初期化
+	for (i = 0; i < MONEYS; i++) {
+		left[i] = 0;
+		back[i] = 0;
+	}
+	
+	//現在の硬貨の残枚数の入力
+	do 
+	{
+		printf("額面（円）：　");
+		scanf_s("%d", &amount);
+		printf("残枚数:　");
+		scanf_s("%d", &number);
+		for (i = 0; i < MONEYS; i++) {
+			if (yen[i] == amount) {
+				left[i] = number;
+				break;
+			}
+		}
+	} while (amount != -1);
+
+	//購入金額の入力
+	printf("\n 購入金額（円）：　");
+	scanf_s("%d", &price);
+	
+	//支払金額の入力
+	printf("支払金額（円）：　");
+	scanf_s("%d", &payment);
+
+	change = payment - price;
+	if (change < 0) {
+		printf("\n 支払金額不足\n");
+	}
+	else {
+		printf("\n 釣銭 %5d 円（内訳）\n", change);
+		for (i = 0; i < MONEYS; i++) {
+			while (change > 0 && left[i] > 0 && change >= yen[i]) {
+				left[i]--;
+				back[i]++;
+				change -= yen[i];
+			}
+			if (change == 0) {
+				break;
+			}
+		}
+		if (change != 0) {
+			printf("釣銭不足\n");
+		}
+		else {
+			for (i = 0; i < MONEYS; i++) {
+				printf("%4d 円 : %3d 枚\n", yen[i], back[i]);
+			}
+		}
+	}
+	return 0;
+}
+#endif
+
+
+//数学：10→16進数変換
 #ifdef _16a
 int main(void) {
 	int a;
